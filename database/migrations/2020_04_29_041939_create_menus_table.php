@@ -15,7 +15,6 @@ class CreateMenusTable extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->integer('parent_id')->nullable(false)->default(0)->comment('父级菜单id');
             $table->string('title')->nullable()->comment('菜单标题');
             $table->tinyInteger('type')->nullable(false)->default(1)->comment('类型。1：菜单；2：权限');
