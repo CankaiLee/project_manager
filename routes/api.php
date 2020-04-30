@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+//Route::post('/user/register', 'UserController@register'); // 注册
+Route::post('/user/login', 'UserController@login'); // 登录
+
+
+Route::group(['middleware' => 'auth.jwt'], function () {
+    Route::get('/user/profile', 'UserController@profile'); // 个人资料
+    Route::get('/user/logout', 'UserController@logout'); // 登出
 });
