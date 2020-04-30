@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterAuthRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -12,6 +14,10 @@ class UserController extends Controller
 {
     protected $loginAfterSignUp = true;
 
+    /**
+     * @param RegisterAuthRequest $request
+     * @return JsonResponse
+     */
     public function register(RegisterAuthRequest $request)
     {
         $user = new User();
@@ -26,12 +32,13 @@ class UserController extends Controller
             return $this->login($request);
         }
 
-        return response()->json([
-            'success' => true,
-            'data' => $user
-        ]);
+        return $this->_output_success('注册成功', $user);
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function login(Request $request)
     {
         $input = $request->only('email', 'password');
@@ -39,47 +46,51 @@ class UserController extends Controller
         $jwt_token = null;
 
         if (! $jwt_token = JWTAuth::attempt($input)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid Email or Password',
-            ], 401);
+            return $this->_output_error('Invalid Email or Password');
         }
 
-        return response()->json([
-            'success' => true,
-            'token' => $jwt_token,
-        ]);
+        return $this->_output_success('登录成功', ['token' => $jwt_token]);
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function logout(Request $request)
     {
-        $this->validate($request, [
-            'token' => 'required'
-        ]);
+        try {
+            $this->validate($request, [
+                'token' => 'required'
+            ]);
+        } catch (ValidationException $e) {
+            $this->_output_exception($e);
+        }
 
         try {
             JWTAuth::invalidate($request->get('token'));
 
-            return response()->json([
-                'success' => true,
-                'message' => 'User logged out successfully'
-            ]);
+            return $this->_output_success('登出成功');
         } catch (JWTException $exception) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, the user cannot be logged out'
-            ], 500);
+            return $this->_output_error('登出失败');
         }
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function profile(Request $request)
     {
-        $this->validate($request, [
-            'token' => 'required'
-        ]);
+        try {
+            $this->validate($request, [
+                'token' => 'required'
+            ]);
+        } catch (ValidationException $e) {
+            $this->_output_exception($e);
+        }
 
         $user = JWTAuth::authenticate($request->get('token'));
 
-        return response()->json(['user' => $user]);
+        return $this->_output_success('个人资料', ['user' => $user]);
     }
 }
