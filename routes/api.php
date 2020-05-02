@@ -47,4 +47,14 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('/project/set_status', 'ProjectController@set_status'); // 设置状态
 
     /* ******************* 项目 End ******************** */
+
+    /* ******************* 任务 Start ******************** */
+
+    Route::get('/task/all', 'TaskController@all'); // 菜单列表
+    Route::post('/task/add', 'TaskController@add'); // 添加菜单
+    Route::post('/task/mod', 'TaskController@mod'); // 编辑菜单
+    Route::get('/task/del', 'TaskController@del'); // 删除菜单
+    Route::post('/task/set_status', 'TaskController@set_status'); // 设置状态
+
+    /* ******************* 任务 End ******************** */
 });
