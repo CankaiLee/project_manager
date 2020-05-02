@@ -19,9 +19,7 @@ class MenuController extends Controller
         $title = $request->get('title');
         $page = $request->get('page', 1);
 
-        $per_page = 10;
-
-        $offset = ($page - 1) * $per_page;
+        $offset = ($page - 1) * $this->per_page;
 
         $wheres = array(
             ['parent_id', '=', $parent_id],
@@ -36,10 +34,10 @@ class MenuController extends Controller
 
 
         $total_result = Menu::where($wheres)->count();
-        $total_page = ceil($total_result / $per_page);
+        $total_page = ceil($total_result / $this->per_page);
 
         $menus = Menu::where($wheres)
-            ->limit($per_page)
+            ->limit($this->per_page)
             ->offset($offset)
             ->get();
 
@@ -51,7 +49,7 @@ class MenuController extends Controller
         return $this->_output_success('菜单列表', [
             'total_result' => $total_result,
             'total_page' => $total_page,
-            'per_page' => $per_page,
+            'per_page' => $this->per_page,
             'page' => $page,
             'items' => $items
         ]);

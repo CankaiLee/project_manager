@@ -11,6 +11,8 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    protected $per_page = 10;
+
     protected function _output_json($message, $data = null, $code = 0, $success = false)
     {
         return response()->json([
