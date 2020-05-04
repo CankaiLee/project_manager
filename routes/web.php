@@ -20,3 +20,7 @@ Route::get('/', function () {
 Route::get('/key', function () {
     echo generate_code();
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
