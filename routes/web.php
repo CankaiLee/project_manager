@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/dashboard/workplace', function() {
+    return view('dashboard/workplace');
+});
+
 Route::get('/key', function () {
     echo generate_code();
 });
