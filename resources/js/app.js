@@ -12,7 +12,9 @@ import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import App from './App.vue'
 import router from './router'
+import axios from 'axios'
 Vue.config.productionTip = false;
+Vue.prototype.$http = axios;
 
 Vue.use(Antd);
 

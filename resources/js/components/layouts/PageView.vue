@@ -2,40 +2,13 @@
     <a-layout id="components-layout-demo-side" style="min-height: 100vh">
         <a-layout-sider v-model="collapsed" collapsible>
             <div class="logo" />
-            <a-menu theme="dark" :default-selected-keys="['1']" mode="inline">
-                <a-menu-item key="1">
-                    <a-icon type="pie-chart" />
-                    <span>Option 1</span>
-                </a-menu-item>
-                <a-menu-item key="2">
-                    <a-icon type="desktop" />
-                    <span>Option 2</span>
-                </a-menu-item>
+            <a-menu theme="dark" v-for="side_menu in side_menus" :key="side_menu.title"  :default-selected-keys="['1']" mode="inline">
                 <a-sub-menu key="sub1">
-                    <span slot="title"><a-icon type="user" /><span>User</span></span>
-                    <a-menu-item key="3">
-                        Tom
-                    </a-menu-item>
-                    <a-menu-item key="4">
-                        Bill
-                    </a-menu-item>
-                    <a-menu-item key="5">
-                        Alex
+                    <span slot="title"><a-icon type="user" /><span>{{ side_menu.title }}</span></span>
+                    <a-menu-item v-for="sub_menu in side_menu.sub_menus" :key="sub_menu.title">
+                        <a :href="sub_menu.uri"><a-icon type="user" /><span>{{ sub_menu.title }}</span></a>
                     </a-menu-item>
                 </a-sub-menu>
-                <a-sub-menu key="sub2">
-                    <span slot="title"><a-icon type="team" /><span>Team</span></span>
-                    <a-menu-item key="6">
-                        Team 1
-                    </a-menu-item>
-                    <a-menu-item key="8">
-                        Team 2
-                    </a-menu-item>
-                </a-sub-menu>
-                <a-menu-item key="9">
-                    <a-icon type="file" />
-                    <span>File</span>
-                </a-menu-item>
             </a-menu>
         </a-layout-sider>
         <a-layout>
@@ -45,7 +18,7 @@
                     <a-breadcrumb-item>User</a-breadcrumb-item>
                     <a-breadcrumb-item>Bill</a-breadcrumb-item>
                 </a-breadcrumb>
-                <div :style="{ padding: '24px', background: '#fff', minHeight: '360px' }">
+                <div :style="{ padding: '24px', background: '#fff', minHeight: '700px' }">
                     <slot>
                         <router-view></router-view>
                     </slot>
@@ -59,11 +32,37 @@
 </template>
 <script>
     export default {
-        data() {
+        data () {
             return {
                 collapsed: false,
+                auth: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC91c2VyXC9sb2dpbiIsImlhdCI6MTU4ODc1ODUwMCwiZXhwIjoxNTg4NzYyMTAwLCJuYmYiOjE1ODg3NTg1MDAsImp0aSI6ImJFZldJRmhGaW8xVWZhN1YiLCJzdWIiOjMsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.7yk-khGMVk9d1IddMqwSzNi8DWbZCvXe2MUP-eIdx_w',
+                side_menus: [
+                    {
+                        icon: '',
+                        title: '',
+                        uri: '',
+                        sub_menus: [
+                            {
+                                icon: '',
+                                title: '',
+                                uri: ''
+                            }
+                        ]
+                    }
+                ],
             };
         },
+        mounted: function() {
+            let uri = '/api/menu/side_menu';
+            let that = this;
+            this.$http.get(uri, {
+                headers: {
+                    Authorization: this.auth
+                }
+            }).then((response) => {
+                that.side_menus = response.data.data;
+            });
+        }
     };
 </script>
 

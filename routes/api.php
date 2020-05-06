@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     /* ******************* 菜单 Start ******************** */
 
     Route::get('/menu/all', 'MenuController@all'); // 菜单列表
+    Route::get('/menu/side_menu', 'MenuController@side_menu'); // 侧边菜单
     Route::post('/menu/add', 'MenuController@add'); // 添加菜单
     Route::post('/menu/mod', 'MenuController@mod'); // 编辑菜单
     Route::get('/menu/del', 'MenuController@del'); // 删除菜单

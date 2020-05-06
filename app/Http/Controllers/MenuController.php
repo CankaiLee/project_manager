@@ -59,6 +59,53 @@ class MenuController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    public function side_menu(Request $request)
+    {
+        $wheres = array(
+            ['parent_id', '=', 0],
+            ['status', '=', 1],
+            ['type', '=', 1]
+        );
+
+        $output_array = array();
+        $top_menus = Menu::where($wheres)->get();
+        if ($top_menus) {
+            foreach ($top_menus as $top_menu) {
+                $sub_menus = Menu::where(array(
+                    ['parent_id', '=', $top_menu->id],
+                    ['status', '=', 1],
+                    ['type', '=', 1]
+                ))->get();
+
+                // 过滤没有子菜单的选项
+                if (! $sub_menus) { continue; }
+
+                $tmp_menu = array(
+                    'icon' => $top_menu->icon,
+                    'title' => $top_menu->title,
+                    'uri' => $top_menu->uri,
+                    'sub_menus' => array()
+                );
+                foreach ($sub_menus as $sub_menu) {
+                    array_push($tmp_menu['sub_menus'], array(
+                        'icon' => $sub_menu->icon,
+                        'title' => $sub_menu->title,
+                        'uri' => $sub_menu->uri
+                    ));
+                }
+
+                array_push($output_array, $tmp_menu);
+                unset($tmp_menu);
+            }
+        }
+
+        return $this->_output_success('侧边菜单', $output_array);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function add(Request $request)
     {
         try {
