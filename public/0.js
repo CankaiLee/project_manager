@@ -45,7 +45,6 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       collapsed: false,
-      auth: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC91c2VyXC9sb2dpbiIsImlhdCI6MTU4ODc1ODUwMCwiZXhwIjoxNTg4NzYyMTAwLCJuYmYiOjE1ODg3NTg1MDAsImp0aSI6ImJFZldJRmhGaW8xVWZhN1YiLCJzdWIiOjMsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.7yk-khGMVk9d1IddMqwSzNi8DWbZCvXe2MUP-eIdx_w',
       side_menus: [{
         icon: '',
         title: '',
@@ -63,7 +62,7 @@ __webpack_require__.r(__webpack_exports__);
     var that = this;
     this.$http.get(uri, {
       headers: {
-        Authorization: this.auth
+        Authorization: that.$store.state.token
       }
     }).then(function (response) {
       that.side_menus = response.data.data;
@@ -208,7 +207,7 @@ var render = function() {
                       "span",
                       { attrs: { slot: "title" }, slot: "title" },
                       [
-                        _c("a-icon", { attrs: { type: "user" } }),
+                        _c("a-icon", { attrs: { type: side_menu.icon } }),
                         _c("span", [_vm._v(_vm._s(side_menu.title))])
                       ],
                       1
@@ -216,15 +215,9 @@ var render = function() {
                     _vm._v(" "),
                     _vm._l(side_menu.sub_menus, function(sub_menu) {
                       return _c("a-menu-item", { key: sub_menu.title }, [
-                        _c(
-                          "a",
-                          { attrs: { href: sub_menu.uri } },
-                          [
-                            _c("a-icon", { attrs: { type: "user" } }),
-                            _c("span", [_vm._v(_vm._s(sub_menu.title))])
-                          ],
-                          1
-                        )
+                        _c("a", { attrs: { href: sub_menu.uri } }, [
+                          _c("span", [_vm._v(_vm._s(sub_menu.title))])
+                        ])
                       ])
                     })
                   ],
@@ -323,14 +316,15 @@ render._withStripped = true
 /*!******************************************************!*\
   !*** ./resources/js/components/layouts/PageView.vue ***!
   \******************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _PageView_vue_vue_type_template_id_99406ff6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PageView.vue?vue&type=template&id=99406ff6& */ "./resources/js/components/layouts/PageView.vue?vue&type=template&id=99406ff6&");
 /* harmony import */ var _PageView_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PageView.vue?vue&type=script&lang=js& */ "./resources/js/components/layouts/PageView.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _PageView_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PageView.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/layouts/PageView.vue?vue&type=style&index=0&lang=css&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _PageView_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _PageView_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _PageView_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PageView.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/layouts/PageView.vue?vue&type=style&index=0&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -362,7 +356,7 @@ component.options.__file = "resources/js/components/layouts/PageView.vue"
 /*!*******************************************************************************!*\
   !*** ./resources/js/components/layouts/PageView.vue?vue&type=script&lang=js& ***!
   \*******************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

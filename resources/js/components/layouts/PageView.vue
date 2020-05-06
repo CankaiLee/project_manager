@@ -4,9 +4,9 @@
             <div class="logo" />
             <a-menu theme="dark" v-for="side_menu in side_menus" :key="side_menu.title"  :default-selected-keys="['1']" mode="inline">
                 <a-sub-menu key="sub1">
-                    <span slot="title"><a-icon type="user" /><span>{{ side_menu.title }}</span></span>
+                    <span slot="title"><a-icon :type="side_menu.icon" /><span>{{ side_menu.title }}</span></span>
                     <a-menu-item v-for="sub_menu in side_menu.sub_menus" :key="sub_menu.title">
-                        <a :href="sub_menu.uri"><a-icon type="user" /><span>{{ sub_menu.title }}</span></a>
+                        <a :href="sub_menu.uri"><span>{{ sub_menu.title }}</span></a>
                     </a-menu-item>
                 </a-sub-menu>
             </a-menu>
@@ -35,7 +35,6 @@
         data () {
             return {
                 collapsed: false,
-                auth: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC91c2VyXC9sb2dpbiIsImlhdCI6MTU4ODc1ODUwMCwiZXhwIjoxNTg4NzYyMTAwLCJuYmYiOjE1ODg3NTg1MDAsImp0aSI6ImJFZldJRmhGaW8xVWZhN1YiLCJzdWIiOjMsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.7yk-khGMVk9d1IddMqwSzNi8DWbZCvXe2MUP-eIdx_w',
                 side_menus: [
                     {
                         icon: '',
@@ -57,7 +56,7 @@
             let that = this;
             this.$http.get(uri, {
                 headers: {
-                    Authorization: this.auth
+                    Authorization: that.$store.state.token
                 }
             }).then((response) => {
                 that.side_menus = response.data.data;

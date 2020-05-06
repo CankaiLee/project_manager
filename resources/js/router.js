@@ -4,23 +4,18 @@ import App from './App.vue'
 
 Vue.use(VueRouter)
 
-export default new VueRouter({
+const router = new VueRouter({
     routes: [
         {
-            name: 'test',
-            path: '/test',
-            redirect: '/test/example',
+            name: 'user',
+            path: '/user',
+            redirect: '/user/login',
             component: App,
             children: [
                 {
-                    name: 'ExampleComponent',
-                    path: '/test/example',
-                    component: resolve => void (require(['./components/ExampleComponent.vue'], resolve)),
-                },
-                {
-                    name: 'Workplace',
-                    path: '/test/workplace',
-                    component: resolve => void(require(['./pages/dashboard/Workplace.vue'], resolve)),
+                    name: 'Login',
+                    path: '/user/login',
+                    component: resolve => void (require(['./pages/user/Login.vue'], resolve)),
                 }
             ]
         },
@@ -52,3 +47,19 @@ export default new VueRouter({
         }
     ]
 });
+
+router.beforeEach((to, from , next) => {
+    if ('/user/login' === to.path) {
+        next();
+    } else {
+        let token = localStorage.getItem('token');
+
+        if ('null' === token || '' === token) {
+            next('/user/login');
+        } else {
+            next();
+        }
+    }
+});
+
+export default router

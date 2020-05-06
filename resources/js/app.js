@@ -12,6 +12,7 @@ import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import App from './App.vue'
 import router from './router'
+import store from './store'
 import axios from 'axios'
 Vue.config.productionTip = false;
 Vue.prototype.$http = axios;
@@ -38,5 +39,6 @@ Vue.use(Antd);
 const app = new Vue({
     el: '#app',
     router,
+    store,
     render: h => h(App),
 });
