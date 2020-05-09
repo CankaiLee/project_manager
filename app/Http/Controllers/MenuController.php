@@ -15,16 +15,26 @@ class MenuController extends Controller
      */
     public function all(Request $request)
     {
-        $parent_id = $request->get('parent_id', 0);
+        $parent_id = $request->get('parent_id', '');
+        $status = $request->get('status', '');
         $title = $request->get('title');
         $page = $request->get('page', 1);
 
         $offset = ($page - 1) * $this->per_page;
 
-        $wheres = array(
-            ['parent_id', '=', $parent_id],
-            ['status', '=', 1],
-        );
+        $wheres = array();
+
+        if ($status != '') {
+            array_push($wheres, array(
+                'status', '=', $status
+            ));
+        }
+
+        if ($parent_id != '') {
+            array_push($wheres, array(
+                'parent_id', '=', "$parent_id"
+            ));
+        }
 
         if ($title) {
             array_push($wheres, array(
@@ -43,7 +53,21 @@ class MenuController extends Controller
 
         $items = array();
         foreach ($menus as $menu) {
-            array_push($items, $menu);
+            $parent_title = '顶级菜单';
+            if ($menu->parent_id > 0) {
+                $parent_menu = Menu::find($menu->parent_id);
+                $parent_title = $parent_menu->title;
+            }
+            array_push($items, array(
+                'key' => $menu->id,
+                'id' => $menu->id,
+                'parent_title' => $parent_title,
+                'title' => $menu->title,
+                'path' => $menu->uri,
+                'type' => $menu->type,
+                'status' => $menu->status,
+                'created_at' => $menu->created_at
+            ));
         }
 
         return $this->_output_success('菜单列表', [
@@ -53,6 +77,26 @@ class MenuController extends Controller
             'page' => $page,
             'items' => $items
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function get(Request $request)
+    {
+        try {
+            $id = $request->get('id');
+
+            $menu = Menu::find($id);
+            if (! $menu) {
+                return $this->_output_error('找不到这个菜单');
+            }
+
+            return $this->_output_success('菜单详情', $menu);
+        } catch (\Exception $e) {
+            return $this->_output_exception($e);
+        }
     }
 
     /**

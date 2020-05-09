@@ -42,6 +42,11 @@ const router = new VueRouter({
                     name: 'MenuList',
                     path: '/menu/all',
                     component: resolve => void (require(['./pages/menu/MenuList.vue'], resolve)),
+                },
+                {
+                    name: 'MenuDetail',
+                    path: '/menu/detail',
+                    component: resolve => void (require(['./pages/menu/MenuDetail.vue'], resolve)),
                 }
             ]
         }
@@ -54,7 +59,7 @@ router.beforeEach((to, from , next) => {
     } else {
         let token = localStorage.getItem('token');
 
-        if ('null' === token || '' === token) {
+        if ('null' === token || null === token || '' === token || undefined === token) {
             next('/user/login');
         } else {
             next();

@@ -11,6 +11,10 @@ const store = new Vuex.Store({
         changeLogin (state, user) {
             state.token = user.token;
             localStorage.setItem('token', user.token);
+        },
+        logout (state) {
+            state.token = '';
+            localStorage.removeItem('token');
         }
     }
 });

@@ -1,6 +1,7 @@
 <template>
     <div class="main">
         <a-form-model
+            class="loginForm"
             ref="ruleForm"
             :model="form"
             :rules="rules"
@@ -22,12 +23,12 @@
                 />
             </a-form-model-item>
 
-            <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+            <a-form-model-item :wrapper-col="{ span: 14, offset: 6 }">
                 <a-button type="primary" @click="onSubmit">
-                    Create
+                    登录
                 </a-button>
                 <a-button style="margin-left: 10px;" @click="resetForm">
-                    Reset
+                    重置
                 </a-button>
             </a-form-model-item>
         </a-form-model>
@@ -41,7 +42,7 @@
         name: "Login",
         data () {
             return {
-                labelCol: { span: 4 },
+                labelCol: { span: 6 },
                 wrapperCol: { span: 14 },
                 form: {
                     email: '',
@@ -88,5 +89,21 @@
 </script>
 
 <style scoped>
+    .main {
+        background-image: url("../../../images/background.jpg");
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        background-size: 100% 100%;
+    }
 
+    .main .loginForm {
+        width: 450px;
+        height: 300px;
+        margin: 200px auto 0;
+        padding: 20px;
+        box-sizing: border-box;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 10px;
+    }
 </style>

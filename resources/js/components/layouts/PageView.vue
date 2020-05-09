@@ -15,8 +15,8 @@
             <a-layout-header style="background: #fff; padding: 0" />
             <a-layout-content style="margin: 0 16px">
                 <a-breadcrumb style="margin: 16px 0">
-                    <a-breadcrumb-item>User</a-breadcrumb-item>
-                    <a-breadcrumb-item>Bill</a-breadcrumb-item>
+                    <a-breadcrumb-item>{{ top_menu }}</a-breadcrumb-item>
+                    <a-breadcrumb-item>{{ sub_menu }}</a-breadcrumb-item>
                 </a-breadcrumb>
                 <div :style="{ padding: '24px', background: '#fff', minHeight: '700px' }">
                     <slot>
@@ -49,17 +49,17 @@
                         ]
                     }
                 ],
+                top_menu: '',
+                sub_menu: ''
             };
         },
         mounted: function() {
             let uri = '/api/menu/side_menu';
             let that = this;
-            this.$http.get(uri, {
-                headers: {
-                    Authorization: that.$store.state.token
+            this.$http.get(uri).then((response) => {
+                if (response.data.success === true) {
+                    that.side_menus = response.data.data;
                 }
-            }).then((response) => {
-                that.side_menus = response.data.data;
             });
         }
     };
