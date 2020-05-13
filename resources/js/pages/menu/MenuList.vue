@@ -1,6 +1,36 @@
 <template>
-    <page-view>
-        <a-table :columns="columns" :data-source="data">
+    <page-view :bindTopMenu="top_menu" :bindSubMenu="sub_menu">
+        <a-form layout="inline" :form="searchForm">
+            <a-form-item>
+                <a-button icon="plus" @click="addMenu">添加</a-button>
+            </a-form-item>
+
+            <a-form-item>
+                <a-select style="width: 200px" v-model="searchForm.parent_id" placeholder="父级菜单">
+                    <a-select-option v-for="menu in parent_menus" :key="menu.id" :value="menu.id">
+                        {{ menu.title }}
+                    </a-select-option>
+                </a-select>
+            </a-form-item>
+
+            <a-form-item>
+                <a-select style="width: 200px" v-model="searchForm.type" placeholder="菜单类型">
+                    <a-select-option v-for="item in type" :key="item.key" :value="item.key">
+                        {{ item.value }}
+                    </a-select-option>
+                </a-select>
+            </a-form-item>
+
+            <a-form-item>
+                <a-input v-model="searchForm.keyword" placeholder="标题或uri" />
+            </a-form-item>
+
+            <a-form-item>
+                <a-button icon="search" @click="onSearch">查询</a-button>
+            </a-form-item>
+        </a-form>
+
+        <a-table :columns="columns" :data-source="data" :pagination="pagination">
             <span slot="type" slot-scope="type">
                 <a-tag v-if="type === 1" color="green">页面</a-tag>
                 <a-tag v-else color="green">权限</a-tag>
@@ -24,6 +54,7 @@
 <script>
     import PageView from '../../components/layouts/PageView'
 
+    // 表格表头字段
     const columns = [
         {
             title: "ID",
@@ -78,6 +109,12 @@
         }
     ];
 
+    // 菜单类型
+    const type = [
+        {key: 1, value: '页面'},
+        {key: 2, value: '权限'}
+    ];
+
     export default {
         name: "MenuList",
         components: {PageView},
@@ -87,15 +124,54 @@
                 columns: columns,
                 data: [],
                 top_menu: "菜单管理",
-                sub_menu: "菜单列表"
+                sub_menu: "菜单列表",
+
+                type: type,
+                parent_menus: [], // 父级菜单
+
+                searchForm: {
+                    parent_id: undefined,
+                    type: undefined,
+                    keyword: undefined,
+                },
+
+                pagination: {
+                    current: 1,
+                    total: 1,
+                    pageSize: 10,
+                    onChange: (page, pageSize) => this.onPageChange(page, pageSize)
+                }
+
             }
         },
         mounted: function () {
             let that = this;
-            this.$http.get('/api/menu/all')
-                .then(result => {
-                    that.data = result.data.data.items;
-                });
+            let query_string = this.html_build_query(this.$route.query);
+            this.$http.get('/api/menu/all?' + query_string).then(result => {
+                    let result_data = result.data.data;
+                    that.data = result_data.items;
+                    that.pagination.current = parseInt(result_data.page);
+                    that.pagination.total = parseInt(result_data.total_result);
+                    that.pagination.pageSize = parseInt(result_data.per_page);
+            });
+
+            this.$http.get(
+                '/api/menu/parent_menu'
+            ).then(result => {
+                that.parent_menus = result.data.data
+            });
+
+            if (this.$route.query.parent_id) {
+                this.searchForm.parent_id = this.$route.query.parent_id;
+            }
+
+            if (this.$route.query.type) {
+                this.searchForm.type = this.$route.query.type;
+            }
+
+            if (this.$route.query.keyword) {
+                this.searchForm.keyword = this.$route.query.keyword;
+            }
         },
         methods: {
             mod (id) {
@@ -115,7 +191,7 @@
                         return;
                     }
 
-                    that.$message.success('上架成功');
+                    that.$message.success('启用成功');
                     that.reload();
                 });
             },
@@ -133,7 +209,7 @@
                         return;
                     }
 
-                    that.$message.success('下架成功');
+                    that.$message.success('禁用成功');
                     that.reload();
                 });
             },
@@ -149,6 +225,28 @@
                         that.$message.success('删除成功');
                         that.reload();
                     });
+            },
+            onSearch () {
+                let uri = '/menu/all';
+                let query = {};
+                let page = this.$route.query.page;
+                if (! page) page = 1;
+                query.parent_id = this.searchForm.parent_id;
+                query.type = this.searchForm.type;
+                query.keyword = this.searchForm.keyword;
+                query.page = page;
+
+                this.$router.push({
+                    path: uri,
+                    query: query
+                });
+                this.reload();
+            },
+            addMenu () {
+                this.$router.push('/menu/add');
+            },
+            onPageChange () {
+                console.log(this.$router.currentRoute.fullPath)
             }
         }
     }

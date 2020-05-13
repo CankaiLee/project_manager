@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
     Route::get('/menu/all', 'MenuController@all'); // 菜单列表
     Route::get('/menu/side_menu', 'MenuController@side_menu'); // 侧边菜单
+    Route::get('/menu/parent_menu', 'MenuController@parent_menu');
     Route::get('/menu/get', 'MenuController@get');
     Route::post('/menu/add', 'MenuController@add'); // 添加菜单
     Route::post('/menu/mod', 'MenuController@mod'); // 编辑菜单

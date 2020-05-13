@@ -47,6 +47,11 @@ const router = new VueRouter({
                     name: 'MenuDetail',
                     path: '/menu/detail',
                     component: resolve => void (require(['./pages/menu/MenuDetail.vue'], resolve)),
+                },
+                {
+                    name: 'MenuDetail',
+                    path: '/menu/add',
+                    component: resolve => void (require(['./pages/menu/MenuDetail.vue'], resolve)),
                 }
             ]
         }

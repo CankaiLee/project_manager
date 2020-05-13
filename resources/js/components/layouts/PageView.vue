@@ -15,8 +15,8 @@
             <a-layout-header style="background: #fff; padding: 0" />
             <a-layout-content style="margin: 0 16px">
                 <a-breadcrumb style="margin: 16px 0">
-                    <a-breadcrumb-item>{{ top_menu }}</a-breadcrumb-item>
-                    <a-breadcrumb-item>{{ sub_menu }}</a-breadcrumb-item>
+                    <a-breadcrumb-item>{{ bindTopMenu }}</a-breadcrumb-item>
+                    <a-breadcrumb-item>{{ bindSubMenu }}</a-breadcrumb-item>
                 </a-breadcrumb>
                 <div :style="{ padding: '24px', background: '#fff', minHeight: '700px' }">
                     <slot>
@@ -52,6 +52,10 @@
                 top_menu: '',
                 sub_menu: ''
             };
+        },
+        props: {
+            bindTopMenu: String,
+            bindSubMenu: String,
         },
         mounted: function() {
             let uri = '/api/menu/side_menu';

@@ -59,6 +59,10 @@ __webpack_require__.r(__webpack_exports__);
       sub_menu: ''
     };
   },
+  props: {
+    bindTopMenu: String,
+    bindSubMenu: String
+  },
   mounted: function mounted() {
     var uri = '/api/menu/side_menu';
     var that = this;
@@ -246,9 +250,9 @@ var render = function() {
                 "a-breadcrumb",
                 { staticStyle: { margin: "16px 0" } },
                 [
-                  _c("a-breadcrumb-item", [_vm._v(_vm._s(_vm.top_menu))]),
+                  _c("a-breadcrumb-item", [_vm._v(_vm._s(_vm.bindTopMenu))]),
                   _vm._v(" "),
-                  _c("a-breadcrumb-item", [_vm._v(_vm._s(_vm.sub_menu))])
+                  _c("a-breadcrumb-item", [_vm._v(_vm._s(_vm.bindSubMenu))])
                 ],
                 1
               ),

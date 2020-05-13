@@ -103,6 +103,36 @@ class MenuController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    public function parent_menu(Request $request)
+    {
+        try {
+            $wheres = array(
+                ['parent_id', '=', 0],
+                ['status', '=', 1]
+            );
+
+            $menus = Menu::where($wheres)->get();
+
+            $output_array = array(
+                ['id' => 0, 'title' => '顶级菜单']
+            );
+            foreach ($menus as $menu) {
+                array_push($output_array, array(
+                    'id' => $menu->id,
+                    'title' => $menu->title
+                ));
+            }
+
+            return $this->_output_success('父级菜单', $output_array);
+        } catch (\Exception $e) {
+            return $this->_output_exception($e);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function side_menu(Request $request)
     {
         $wheres = array(
@@ -157,7 +187,7 @@ class MenuController extends Controller
                 'parent_id' => 'required|integer',
                 'title' => 'required|string',
                 'type' => 'required|integer',
-                'uri' => 'required|string'
+                'uri' => 'required|string',
             ));
         } catch (ValidationException $e) {
             return $this->_output_exception($e);
@@ -167,12 +197,16 @@ class MenuController extends Controller
         $title = $request->post('title');
         $type = $request->post('type');
         $uri = $request->post('uri');
+        $icon = $request->post('icon');
+        $status = $request->post('status');
 
         $menu = new Menu();
         $menu->parent_id = $parent_id;
         $menu->title = $title;
         $menu->type = $type;
         $menu->uri = $uri;
+        $menu->status = $status;
+        $menu->icon = $icon;
         $result = $menu->save();
 
         if (! $result) {
@@ -194,7 +228,7 @@ class MenuController extends Controller
                 'parent_id' => 'required|integer',
                 'title' => 'required|string',
                 'type' => 'required|integer',
-                'uri' => 'required|string'
+                'uri' => 'required|string',
             ));
         } catch (ValidationException $e) {
             return $this->_output_exception($e);
@@ -205,12 +239,17 @@ class MenuController extends Controller
         $title = $request->post('title');
         $type = $request->post('type');
         $uri = $request->post('uri');
+        $status = $request->post('status');
+        $icon = $request->post('icon');
 
         $menu = Menu::find($id);
         $menu->parent_id = $parent_id;
         $menu->title = $title;
         $menu->type = $type;
         $menu->uri = $uri;
+        $menu->icon = $icon;
+        $menu->status = $status;
+
         $result = $menu->save();
 
         if (! $result) {

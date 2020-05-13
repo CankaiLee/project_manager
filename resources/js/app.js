@@ -13,11 +13,13 @@ import 'ant-design-vue/dist/antd.css'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import base from './base'
 import axios from 'axios'
 Vue.config.productionTip = false;
 Vue.prototype.$http = axios;
 
 Vue.use(Antd);
+Vue.use(base);
 
 /**
  * The following block of code may be used to automatically register your
@@ -52,7 +54,6 @@ axios.interceptors.request.use(
 // 响应拦截器 判断token是否过期
 axios.interceptors.response.use(
     response => {
-        console.log(response);
         if (response.data.code === 40001 || response.data.code === '40001') {
             store.commit('logout');
             router.replace('/user/login');
